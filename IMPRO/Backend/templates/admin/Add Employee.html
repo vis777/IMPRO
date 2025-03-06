@@ -1,0 +1,118 @@
+{% extends 'adminindex.html' %}
+{% block content %}
+<body>
+<div class="col-12 grid-margin stretch-card">
+  <div class="card">
+    <div class="card-body">
+      <h4 class="card-title">Add Employee</h4>
+      <form class="forms-sample" method="post" action="{% url 'add_employee' %}" enctype="multipart/form-data">
+        {% csrf_token %}
+        
+        <div class="form-group">
+            <label for="exampleInputName1">Name</label>
+            <input type="text" class="form-control" id="exampleInputName1" name="name" required pattern="[A-Z a-z.]{3,100}" title="Name should contain 3-100 characters, letters only." />
+        </div>
+
+        <div class="form-group">
+            <label for="exampleInputName9">Username</label>
+            <input type="text" class="form-control" id="exampleInputName9" name="username" required />
+        </div>
+        <div class="form-group">
+            <label for="exampleInputName10">Password</label>
+            <input type="text" class="form-control" id="exampleInputName10" name="password" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"/>
+        </div>
+
+        <div class="form-group">
+            <label for="exampleInputEmail1">Email</label>
+            <input type="email" class="form-control" id="exampleInputEmail1" name="email" required pattern="[a-z0-9._%+-]+@[a-z0-9]+\.[a-z]{2,3}" title="Please enter a valid email." />
+        </div>
+
+        <div class="form-group">
+            <label for="exampleInputPhone">Phone</label>
+            <input type="number" class="form-control" id="exampleInputPhone" name="phone" required pattern="^(?:\+91|91|0)?[789]\d{9}$" title="Phone should be a valid number with up to two decimal places"/>
+        </div>
+
+        <div class="form-group">
+            <label for="departmentSelect">Department</label>
+            <select class="form-control" id="departmentSelect" name="department" required>
+                <option value="" disabled selected>Select Department</option>
+                {% for department in departments %}
+                    <option value="{{ department.id }}">{{ department.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="exampleInputLocation">Location</label>
+            <input type="text" class="form-control" id="exampleInputLocation" name="location" required pattern="[A-Z a-z.]{3,100}" title="Location should contain 3-100 characters, letters only." />
+        </div>
+
+        <div class="form-group">
+            <label for="exampleInputPosition">Position</label>
+            <input type="text" class="form-control" id="exampleInputPosition" name="position" required pattern="[A-Z a-z.]{3,100}" title="Position should contain 3-100 characters, letters only." />
+        </div>
+
+        <div class="form-group">
+            <label for="exampleInputDateJoined">Date Joined</label>
+            <input type="date" class="form-control" id="exampleInputDateJoined" name="date_joined" required />
+        </div>
+        
+        <div class="form-group">
+            <label for="shiftSelect">Shift</label>
+            <select class="form-control" id="shiftSelect" name="shift" required onchange="updateShiftTime()">
+                <option value="" disabled selected>Select Shift</option>
+                <option value="day">Day Shift</option>
+                <option value="night">Night Shift</option>
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label for="shiftTiming">Shift Timing</label>
+            <input type="text" class="form-control" id="shiftTiming" name="shift_timing" readonly />
+        </div>
+        
+        <script>
+            function updateShiftTime() {
+                var shift = document.getElementById("shiftSelect").value;
+                var shiftTiming = document.getElementById("shiftTiming");
+        
+                if (shift === "day") {
+                    shiftTiming.value = "9:30 AM - 6:00 PM";
+                } else if (shift === "night") {
+                    shiftTiming.value = "11:00 PM - 7:30 AM";
+                } else {
+                    shiftTiming.value = "";
+                }
+            }
+        </script>
+
+        <div class="form-group">
+            <label for="exampleInputSalary">Salary</label>
+            <input type="number" class="form-control" id="exampleInputSalary" name="salary" required pattern="^\d+(\.\d{1,2})?$" title="Salary should be a valid number with up to two decimal places"/>
+        </div>
+
+        <div class="form-group">
+            <label for="statusSelect">Status</label>
+            <select class="form-control" id="statusSelect" name="status" required>
+                <option value="" disabled selected>Select Status</option>
+                <option value="active">Active</option>
+                <option value="inactive">Inactive</option>
+            </select>
+        </div>
+
+        <!-- Image Upload Field -->
+        <div class="form-group">
+            <label for="employeeImage">Profile Picture</label>
+            <input type="file" class="form-control-file" id="employeeImage" name="image" >
+        </div>
+
+        <div class="form-group text-center">
+            <button type="submit" class="btn btn-info">Add Employee</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+</body>
+{% endblock %}

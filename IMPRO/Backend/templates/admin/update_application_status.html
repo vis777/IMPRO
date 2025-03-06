@@ -1,0 +1,16 @@
+{% extends 'adminindex.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="text-center mb-4">Update Application Status</h2>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+
+        <button type="submit" class="btn btn-success">Update</button>
+        <a href="{% url 'job_user_list' job_id=object.vacancy.id %}" class="btn btn-secondary">Cancel</a>
+
+    </form>
+</div>
+{% endblock %}

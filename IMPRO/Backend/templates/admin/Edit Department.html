@@ -1,0 +1,33 @@
+{% extends 'adminindex.html' %}
+{% block content %}
+<body>
+  <div class="col-12 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">Edit Department</h4>
+        <form id="form1" name="form1" method="post" action="{% url 'updatedepartment' pk=depa.id %}" enctype="multipart/form-data">
+          {% csrf_token %}
+          
+          
+          <div class="form-group">
+            <label for="departmentName">Department Name</label>
+            <input type="text" class="form-control" id="departmentName" name="name" value="{{ depa.name }}"/>
+          </div>
+
+        
+          <div class="form-group">
+            <label for="departmentDescription">Description</label>
+            <textarea class="form-control" id="departmentDescription" name="description" rows="4" placeholder="Enter department description (optional)">{{ depa.description }}</textarea>
+          </div>
+          
+          <div class="form-group text-center">
+            <button type="submit" class="btn btn-info">Update Department</button>
+          </div>
+          
+        </form>
+      </div>
+    </div>
+  </div>
+
+</body>
+{% endblock %}

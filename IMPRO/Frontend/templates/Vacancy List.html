@@ -1,0 +1,89 @@
+{% extends 'userindex.html' %}
+{% block content %}
+<html>
+<head>
+    <title>Vacancy List</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .container {
+            max-width: 900px;
+        }
+
+        .vacancy-card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .vacancy-card:hover {
+            transform: scale(1.02);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .vacancy-title {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: #007bff;
+        }
+
+        .vacancy-info {
+            font-size: 0.9rem;
+            color: #6c757d;
+        }
+
+        .no-vacancies {
+            text-align: center;
+            font-size: 1.2rem;
+            color: #6c757d;
+            margin-top: 20px;
+        }
+
+        .btn-apply {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            transition: background-color 0.3s;
+        }
+
+        .btn-apply:hover {
+            background-color: #218838;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h2 class="text-center mb-4">Available Vacancies</h2>
+        {% if vac %}
+            <div class="row g-4">
+                {% for i in vac %}
+                    <div class="col-md-6">
+                        <div class="vacancy-card p-3">
+                            <h4 class="vacancy-title">{{ i.title }}</h4>
+                            <p class="vacancy-info"><strong>Location:</strong> {{ i.location }}</p>
+                            <p class="vacancy-info"><strong>Qualifications:</strong> {{ i.qualifications }}</p>
+                            <p class="vacancy-info"><strong>Description:</strong> {{ i.description }}</p>
+                            <p class="vacancy-info"><strong>Salary:</strong> {{ i.salary|default:"Not specified" }}</p>
+                            <p class="vacancy-info"><small>Posted on: {{ i.posted_on }}</small></p>
+                            <div class="mt-3">
+                                <a href="{% url 'apply_job' i.id %}" class="btn btn-apply">
+                                    Apply Now
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="no-vacancies">No vacancies available.</p>
+        {% endif %}
+    </div>
+</body>
+</html>
+{% endblock %}

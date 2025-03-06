@@ -1,0 +1,208 @@
+{% comment %} <!DOCTYPE html> {% endcomment %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Portal</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .profile-img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        .nav-pills .nav-link.active {
+            background-color: #0d6efd;
+        }
+        .attendance-status.present {
+            color: green;
+        }
+        .attendance-status.absent {
+            color: red;
+        }
+        .project-card {
+            transition: transform 0.2s;
+        }
+        .project-card:hover {
+            transform: translateY(-5px);
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Left Sidebar Navigation -->
+            <div class="col-md-3 col-lg-2 bg-light p-3 vh-100">
+                <div class="text-center mb-4">
+                    <img src="{{ employee.image.url }}" alt="Employee Photo" class="profile-img mb-2">
+                    <h5>{{ employee.name }}</h5>
+                    <p class="text-muted">{{ employee.position }}</p>
+                </div>
+                <div class="nav flex-column nav-pills">
+                    <button class="nav-link active mb-2" data-bs-toggle="pill" data-bs-target="#profile">Profile</button>
+                    <button class="nav-link mb-2" data-bs-toggle="pill" data-bs-target="#attendance">Attendance</button>
+                    <button class="nav-link mb-2" data-bs-toggle="pill" data-bs-target="#career">Career Progress</button>
+                    <button class="nav-link mb-2" data-bs-toggle="pill" data-bs-target="#projects">Projects</button>
+                    <button class="nav-link text-danger" data-bs-toggle="pill" onclick="location.href='{% url 'employee_logout' %}'">
+                        Logout
+                    </button>
+                </div>
+            </div>
+
+            <!-- Main Content Area -->
+            <div class="col-md-9 col-lg-10 p-4">
+                <div class="tab-content">
+                    <!-- Profile Section -->
+                    <div class="tab-pane fade show active" id="profile">
+                        <h3>Personal Information</h3>
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <p><strong>Employee ID:</strong> {{ employee.id }}</p>
+                                        <p><strong>Full Name:</strong> {{ employee.name }}</p>
+                                        <p><strong>Email:</strong> {{ employee.email }}</p>
+                                        <p><strong>Phone:</strong> {{ employee.phone }}</p>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p><strong>Department:</strong> {{ employee.department.name }}</p>
+                                        <p><strong>Position:</strong> {{ employee.position }}</p>
+                                        <p><strong>Join Date:</strong> {{ employee.date_joined }}</p>
+                                        <p><strong>Location:</strong> {{ employee.location }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Attendance Section -->
+                    <div class="tab-pane fade" id="attendance">
+                        <h3>Attendance Records</h3>
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>Date</th>
+                                                <th>Time</th>
+                                                <th>Status</th>
+                                                <th>Remarks</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for record in attendance_records %}
+                                            <tr>
+                                                <td>{{ record.date }}</td>
+                                                <td>{{ record.time }}</td>
+                                                <td>
+                                                    <span class="attendance-status {{ record.status }}">
+                                                        {{ record.get_status_display }}
+                                                    </span>
+                                                </td>
+                                                <td>{{ record.remarks|default:"-" }}</td>
+                                            </tr>
+                                            {% empty %}
+                                            <tr>
+                                                <td colspan="4" class="text-center">No attendance records available.</td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Career Progress Section -->
+                    <div class="tab-pane fade" id="career">
+                        <h3>Career Progress</h3>
+                        <div class="row">
+                            <!-- Position Changes / Promotions -->
+                            <div class="col-md-6 mb-4">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h5 class="card-title mb-0">Promotions</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="timeline">
+                                            <div class="mb-3">
+                                                <h6>{{ employee.position }}</h6>
+                                                <p class="text-muted">
+                                                    {% if employee.rotation_date %}
+                                                        Effective from: {{ employee.rotation_date }}
+                                                    {% else %}
+                                                        No recent promotions.
+                                                    {% endif %}
+                                                </p>
+                                                {% if employee.reason %}
+                                                    <p class="text-muted"><strong>Reason:</strong> {{ employee.reason }}</p>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                    
+                            <!-- Salary Details -->
+                            <div class="col-md-6 mb-4">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h5 class="card-title mb-0">Salary Details</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <p class="text-muted">
+                                            Current Salary: ₹{{ employee.salary }}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Projects Section -->
+<div class="tab-pane fade" id="projects">
+    <h3>Assigned Projects</h3>
+    <div class="row">
+        {% for project in assigned_projects %}
+            <div class="col-md-6 mb-4">
+                <div class="card project-card">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ project.name }}</h5>
+                        <p class="card-text">{{ project.description }}</p>
+                        <div class="mb-3">
+                            <h6>Team Members:</h6>
+                            <div class="d-flex gap-2">
+                                {% for member in project.assigned_to.all %}
+                                    <span class="badge bg-primary">{{ member.name }}</span>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="progress mb-3">
+                            {% if project.status == "pending" %}
+                                <div class="progress-bar bg-warning" role="progressbar" style="width: 20%;" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">20%</div>
+                            {% elif project.status == "in_progress" %}
+                                <div class="progress-bar bg-info" role="progressbar" style="width: 60%;" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100">60%</div>
+                            {% else %}
+                                <div class="progress-bar bg-success" role="progressbar" style="width: 100%;" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">100%</div>
+                            {% endif %}
+                        </div>
+                        <p class="mb-0"><small class="text-muted">Start Date: {{ project.start_date }}</small></p>
+                        <p class="mb-0"><small class="text-muted">Due Date: {{ project.due_date }}</small></p>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <p class="text-center">No assigned projects.</p>
+        {% endfor %}
+    </div>
+</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

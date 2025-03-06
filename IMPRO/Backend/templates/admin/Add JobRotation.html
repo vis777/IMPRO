@@ -1,0 +1,68 @@
+{% extends 'adminindex.html' %}
+{% block content %}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-lg border-0">
+                <div class="card-body">
+                    <h4 class="card-title">Promote Employee - {{ employee.name }}</h4>
+
+                    <!-- ✅ Show Success Message -->
+                    {% if messages %}
+                        <div class="alert alert-success">
+                            {% for message in messages %}
+                                {{ message }}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+
+                    <form method="POST">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label>New Position</label>
+                            {{ form.position }}
+                        </div>
+
+                        <div class="form-group">
+                            <label>New Salary</label>
+                            {{ form.salary }}
+                        </div>
+
+                        <div class="form-group">
+                            <label>Shift</label>
+                            {{ form.shift }}
+                        </div>
+
+                        <div class="form-group">
+                            <label>Reason for Promotion</label>
+                            {{ form.reason }}
+                        </div>
+
+                        <div class="form-group">
+                            <label>Rotation Date</label>
+                            <input type="text" class="form-control" value="{{ employee.rotation_date|default:'Will be set automatically' }}" readonly>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Promote Employee</button>
+                        <a href="{% url 'manage_employee' %}" class="btn btn-secondary">Cancel</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ✅ Auto-hide messages after 3 seconds -->
+<script>
+    setTimeout(() => {
+        let alertBox = document.querySelector(".alert");
+        if (alertBox) {
+            alertBox.style.transition = "opacity 0.5s";
+            alertBox.style.opacity = "0";
+            setTimeout(() => alertBox.remove(), 500);
+        }
+    }, 3000);
+</script>
+
+{% endblock %}

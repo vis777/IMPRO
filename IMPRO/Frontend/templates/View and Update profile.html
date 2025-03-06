@@ -1,0 +1,41 @@
+{% extends 'userindex.html' %}
+{% block content %}
+<body>
+  <form id="form1" name="form1" method="post" action="{% url 'saveupdate' dataid=regs.id %}" enctype="multipart/form-data">
+    {% csrf_token %}
+    <table class="table table-striped">
+      <tr>
+        <th width="152" scope="row">First Name </th>
+        <td width="175"><label>
+          <input type="text" name="fname" value="{{regs.first_name}}" class="form-control" required pattern="[A-Z a-z.]{3,25}"/>
+        </label></td>
+      </tr>
+      <tr>
+        <th scope="row">Last Name </th>
+        <td><label>
+          <input type="text" name="lname" value="{{regs.last_name}}" class="form-control" required pattern="[A-Z a-z.]{3,25}"/>
+        </label></td>
+      </tr>
+      <tr>
+        <th scope="row">Email</th>
+        <td><label>
+          <input type="text" name="email" value="{{regs.email}}" class="form-control" required pattern="[a-z0-9._%+-]+@[a-z0-9]+\.[a-z]{2,3}"/>
+        </label></td>
+      </tr>
+      <tr>
+      <tr>
+        <th scope="row">Phone</th>
+        <td><label>
+          <input type="text" name="phone" value="{{regs.phone}}" class="form-control"/>
+        </label></td>
+      </tr>
+      <tr>
+        <th colspan="2" scope="row"><label>
+          <input type="submit" name="Submit" value="Update" class="btn btn-info"/>
+        </label></th>
+      </tr>
+    </table>
+  </form>
+</body>
+</html>
+{% endblock %}

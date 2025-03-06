@@ -1,0 +1,156 @@
+{% extends 'adminindex.html' %}
+{% load static %}
+
+{% block content %}
+
+<style>
+  .pro-pic{
+    background-size: cover;
+    background-position: center;
+  }
+</style>
+
+<div class="col-12 grid-margin stretch-card">
+  <div class="card">
+    <div class="card-body">
+      <h4 class="card-title">Manage Employees</h4>
+
+      <!-- Unified Search Bar -->
+      <form method="GET" action="{% url 'manage_employee' %}">
+        <div class="input-group mb-3">
+          <input type="text" name="search" class="form-control" placeholder="Search by Name, Position, or Department..."
+                 value="{{ search_query }}" aria-label="Search Employee">
+          <div class="input-group-append">
+            <button class="btn btn-primary" type="submit">Search</button>
+          </div>
+        </div>
+      </form>
+
+
+      <div class="col-md-10">
+        <div class="card">
+          <div class="table-responsive pt-6">
+            <table class="table table-striped project-orders-table">
+              <thead>
+                <tr>
+                  <th>Profile</th>
+                  <th>
+                    <a href="?search={{ search_query }}&sort=name">
+                      Name
+                      {% if sort_by == 'name' %} &#8595; {% endif %}
+                    </a>
+                  </th>
+                  <th>
+                    <a href="?search={{ search_query }}&sort=position">
+                      Position
+                      {% if sort_by == 'position' %} &#8595; {% endif %}
+                    </a>
+                  </th>
+                  <th>Username</th>
+                  <th>Password</th>
+                  <th>Email</th>
+                  <th>Phone</th>
+                  <th>
+                    <a href="?search={{ search_query }}&sort=department">
+                      Department
+                      {% if sort_by == 'department' %} &#8595; {% endif %}
+                    </a>
+                  </th>
+                  <th>Location</th>
+                  <th>Date Joined</th>
+                  <th>Status</th>
+                  <th>Salary</th>
+                  <th>Shift</th>
+                  <th>Reason</th>
+                  <th>Rotation date</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for d in emp %}
+                  <tr>
+                    <td>
+                      {% if d.image %}
+                      <!-- <div class="rounded-circle pro-pic" style="width: 50px;height: 50px;background-image: url('{{d.image.url}}'); border: 1px solid black;"></div> -->
+                        <img src="{{ d.image.url }}" alt="Profile Picture" class="rounded-circle" width="50" height="50">
+                         <!-- <a href=""></a> -->
+                      {% else %}
+                        <span class="text-muted">No Image</span>
+                      {% endif %}
+                    </td>                    
+                    <td>{{ d.name }}</td>
+                    <td>{{ d.position }}</td>
+                    <td>{{ d.UserNaMe }}</td>
+                    <td>{{ d.PassWoRd }}</td>
+                    <td>{{ d.email }}</td>
+                    <td>{{ d.phone }}</td>
+                    <td>{{ d.department.name }}</td>
+                    <td>{{ d.location }}</td>
+                    <td>{{ d.date_joined }}</td>
+                    <td>{{ d.status }}</td>
+                    <td>{{ d.salary }}</td>
+                    <td>
+                      {% if d.shift == 'day' %}
+                        <span class="badge badge-success">Day Shift</span>
+                      {% else %}
+                        <span class="badge badge-warning">Night Shift</span>
+                      {% endif %}
+                    </td>
+                    <td>{{ d.reason }}</td>
+                    <td>{{ d.rotation_date }}</td>
+                    <td>
+                      <div class="d-flex align-items-center">
+                        <a href="{% url 'edit_employee' d.id %}" class="btn btn-success btn-sm btn-icon-text mr-3">
+                          Edit <i class="typcn typcn-edit btn-icon-append"></i>
+                        </a>
+                        <form method="POST" action="{% url 'delete_employee' d.id %}" onsubmit="return confirmDelete();" class="mb-0">
+                          {% csrf_token %}
+                          <button type="submit" class="btn btn-danger btn-sm btn-icon-text">
+                            Delete <i class="typcn typcn-delete-outline btn-icon-append"></i>
+                          </button>
+                        </form>
+                        <a href="{% url 'add_job_rotation' d.id %}" class="btn btn-primary btn-sm btn-icon-text ml-3">
+                          Promote <i class="typcn typcn-arrow-up btn-icon-append"></i>
+                        </a>
+                      </div>
+                    </td>
+                  </tr>
+                {% empty %}
+                  <tr>
+                    <td colspan="10" class="text-center">No employees found.</td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+
+            <!-- Pagination Controls -->
+            <nav>
+              <ul class="pagination justify-content-center">
+                {% if emp.has_previous %}
+                  <li class="page-item"><a class="page-link" href="?page=1&search={{ search_query }}&sort={{ sort_by }}">First</a></li>
+                  <li class="page-item"><a class="page-link" href="?page={{ emp.previous_page_number }}&search={{ search_query }}&sort={{ sort_by }}">Previous</a></li>
+                {% endif %}
+
+                <li class="page-item active"><span class="page-link">Page {{ emp.number }} of {{ emp.paginator.num_pages }}</span></li>
+
+                {% if emp.has_next %}
+                  <li class="page-item"><a class="page-link" href="?page={{ emp.next_page_number }}&search={{ search_query }}&sort={{ sort_by }}">Next</a></li>
+                  <li class="page-item"><a class="page-link" href="?page={{ emp.paginator.num_pages }}&search={{ search_query }}&sort={{ sort_by }}">Last</a></li>
+                {% endif %}
+              </ul>
+            </nav>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function confirmDelete() {
+    return confirm("Are you sure you want to delete this employee?");
+  }
+</script>
+
+{% endblock %}

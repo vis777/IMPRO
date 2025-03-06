@@ -1,0 +1,108 @@
+{% extends 'adminindex.html' %}
+{% block content %}
+
+  <div class="col-12 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">Edit Employee</h4>
+        <form id="form1" name="form1" method="post" action="{% url 'edit_employee' pk=empl.id %}" enctype="multipart/form-data">
+  {% csrf_token %}
+  
+  <div class="form-group">
+    <label for="employeeImage">Profile Image</label>
+    <input type="file" class="form-control-file" id="employeeImage" name="image" accept="image/*">
+    
+    {% if empl.image %}
+      <div class="mt-2">
+        <img src="{{ empl.image.url }}" alt="Employee Image" width="100" height="100" class="rounded-circle">
+      </div>
+    {% endif %}
+  </div>
+  <div class="form-group">
+    <label for="employeeName">Name</label>
+    <input type="text" class="form-control" id="employeeName" name="name" value="{{ empl.name }}" required pattern="[A-Za-z. ]{3,25}" title="Name should contain 3-25 characters, letters only." />
+  </div>
+
+  <div class="form-group">
+    <label for="exampleInputName9">Username</label>
+    <input type="text" class="form-control" id="exampleInputName9" name="username" value="{{ empl.UserNaMe }}" required />
+</div>
+
+<div class="form-group">
+    <label for="exampleInputName10">Password</label>
+    <input type="password" class="form-control" id="exampleInputName10" name="password" value="{{ empl.PassWoRd }}" />
+    {% comment %} <small>If you don't want to change the password, leave it blank.</small> {% endcomment %}
+</div>
+
+  <div class="form-group">
+    <label for="exampleInputEmail1">Email</label>
+    <input type="email" class="form-control" id="exampleInputEmail1" name="email" value="{{ empl.email }}" required pattern="[a-z0-9._%+-]+@[a-z0-9]+\.[a-z]{2,3}" title="Please enter a valid email." />
+  </div>
+
+  <div class="form-group">
+    <label for="exampleInputPhone">Phone</label>
+   
+    <input type="number" class="form-control" id="exampleInputPhone" name="phone" value="{{ empl.phone }}" pattern="^(?:\+91|91|0)?[789]\d{9}$" title="Phone should be a valid number with up to two decimal places"/>
+</div>
+
+  <div class="form-group">
+    <label for="departmentSelect">Department</label>
+    <select class="form-control" id="departmentSelect" name="department" required>
+      <option value="" disabled>Select Department</option>
+      {% for department in departments %}
+        <option value="{{ department.id }}" {% if department.id == empl.department.id %}selected{% endif %}>
+          {{ department.name }}
+        </option>
+      {% endfor %}
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label for="exampleInputLocation">Location</label>
+    <input type="text" class="form-control" id="exampleInputLocation" name="location" value="{{ empl.location }}" required pattern="[A-Z a-z.]{3,100}" title="Location should contain 3-100 characters, letters only." />
+</div>
+
+  <div class="form-group">
+    <label for="employeePosition">Position</label>
+    <input type="text" class="form-control" id="employeePosition" name="position" value="{{ empl.position }}" required pattern="[A-Za-z. ]{3,25}" title="Position should contain 3-25 characters, letters only." />
+  </div>
+
+  <div class="form-group">
+    <label for="dateJoined">Date Joined</label>
+    <input type="date" class="form-control" id="dateJoined" name="date_joined" value="{{ empl.date_joined|date:'Y-m-d' }}" required />
+  </div>
+
+  <div class="form-group">
+    <label for="statusSelect">Status</label>
+    <select class="form-control" id="statusSelect" name="status" required>
+      <option value="" disabled>Select Status</option>
+      <option value="active" {% if empl.status == 'active' %}selected{% endif %}>Active</option>
+      <option value="inactive" {% if empl.status == 'inactive' %}selected{% endif %}>Inactive</option>
+    </select>
+  </div>
+  
+  <div class="form-group">
+    <label for="shiftSelect">Shift</label>
+    <select class="form-control" id="shiftSelect" name="shift" required>
+        <option value="day" {% if empl.shift == 'day' %}selected{% endif %}>Day Shift (9:30 AM - 6:00 PM)</option>
+        <option value="night" {% if empl.shift == 'night' %}selected{% endif %}>Night Shift (11:00 PM - 7:30 AM)</option>
+    </select>
+</div>
+
+
+  <div class="form-group">
+    <label for="exampleInputSalary">Salary</label>
+    <input type="number" class="form-control" id="exampleInputSalary" name="salary" value="{{ empl.salary }}" required pattern="^\d+(\.\d{1,2})?$" title="Salary should be a valid number with up to two decimal places"/>
+  </div>
+
+  <div class="form-group text-center">
+    <button type="submit" class="btn btn-info">Update Employee</button>
+  </div>
+</form>
+      </div>
+    </div>
+  </div>
+
+
+
+{% endblock %}

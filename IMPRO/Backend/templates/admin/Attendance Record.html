@@ -1,0 +1,98 @@
+{% extends 'adminindex.html' %}
+{% block content %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attendance Records</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .table-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .status-present {
+            background-color: #d4edda !important;
+        }
+        .status-absent {
+            background-color: #f8d7da !important;
+        }
+        .status-late {
+            background-color: #fff3cd !important;
+        }
+        .status-on_leave {
+            background-color: #cce5ff !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="table-container">
+            <h2 class="text-center mb-4">Attendance Records - {{ current_date }}</h2>
+            <table class="table table-bordered table-striped text-center">
+                <thead class="table-dark">
+                    <tr>
+                        <th>#</th>
+                        <th>Employee Name</th>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>Status</th>
+                        <th>Remarks</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for record in records %}
+                    <tr class="status-{{ record.status }}">
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ record.employee.name }}</td>
+                        <td>{{ record.date }}</td>
+                        <td>{{ record.time }}</td>
+                        <td><strong>{{ record.get_status_display }}</strong></td>
+                        <td>{{ record.remarks|default:"-" }}</td>
+                        <td>
+                            <form method="POST">
+                                {% csrf_token %}
+                                <input type="hidden" name="record_id" value="{{ record.id }}">
+                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="7">No attendance records found.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <!-- Pagination Controls -->
+            <nav aria-label="Page navigation">
+                <ul class="pagination justify-content-center">
+                    {% if page_number > 1 %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_number|add:-1 }}">Previous Page</a>
+                        </li>
+                    {% endif %}
+                    <li class="page-item disabled">
+                        <a class="page-link">Page {{ page_number }} of {{ paginator.num_pages }}</a>
+                    </li>
+                    {% if page_number < paginator.num_pages %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_number|add:1 }}">Next Page</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+{% endblock %}

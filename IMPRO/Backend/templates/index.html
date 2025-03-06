@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal System - Homepage</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f0f2f5;
+        }
+
+        .navbar {
+            background-color: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #1a73e8;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #1a73e8;
+        }
+
+        .address {
+            font-size: 0.9rem;
+            color: #666;
+            margin-right: 2rem;
+        }
+
+        .hero {
+            padding: 8rem 2rem 4rem;
+            text-align: center;
+            background: linear-gradient(rgba(26, 115, 232, 0.8), rgba(13, 71, 161, 0.8)), 
+                        url(static/images/Pic1.jpg) center/cover no-repeat;
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        .button {
+            padding: 0.8rem 2rem;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: transform 0.2s;
+        }
+
+        .button:hover {
+            transform: translateY(-2px);
+        }
+
+        .primary-button {
+            background-color: white;
+            color: #1a73e8;
+        }
+
+        .secondary-button {
+            background-color: transparent;
+            color: white;
+            border: 2px solid white;
+        }
+
+        .about-us {
+            padding: 4rem 0;
+            background-color: white;
+        }
+
+        .about-us-text {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .about-us-text h2 {
+            color: #1a73e8;
+            margin-bottom: 2rem;
+            font-size: 2.5rem;
+        }
+
+        .about-us-text p {
+            line-height: 1.8;
+            color: #555;
+            font-size: 1.1rem;
+        }
+
+        .category-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            padding: 0 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .category-card {
+            position: relative;
+            height: 300px;
+            overflow: hidden;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .category-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, #1a73e8 50%, transparent 50%);
+            z-index: 1;
+        }
+
+        .category-content {
+            position: absolute;
+            top: 0;
+            left: 0;
+            padding: 2rem;
+            color: white;
+            z-index: 2;
+        }
+
+        .category-content h3 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            font-weight: bold;
+        }
+
+        .category-content .shop-now {
+            display: inline-block;
+            padding: 0.8rem 1.5rem;
+            background-color: white;
+            color: #1a73e8;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: 500;
+            transition: transform 0.3s;
+        }
+
+        .category-content .shop-now:hover {
+            transform: translateY(-2px);
+        }
+
+        .category-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 0;
+        }
+
+        .services {
+            padding: 4rem 2rem;
+            background-color: white;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .service-block {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            margin-bottom: 4rem;
+            align-items: center;
+        }
+
+        @media (max-width: 768px) {
+            .service-block {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+        }
+
+        .service-content h2 {
+            color: #2d3748;
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            font-weight: bold;
+        }
+
+        .service-content p {
+            color: #4a5568;
+            line-height: 1.8;
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .service-image {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .service-cta {
+            display: inline-block;
+            padding: 0.8rem 2rem;
+            background-color: #1a73e8;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: 500;
+            transition: transform 0.3s;
+            margin-top: 1rem;
+        }
+
+        .service-cta:hover {
+            transform: translateY(-2px);
+            background-color: #1557b0;
+        }
+        .features {
+            padding: 4rem 2rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .feature-card h3 {
+            color: #1a73e8;
+            margin-bottom: 1rem;
+        }
+
+        .footer {
+            background-color: #1f2937;
+            color: #fff;
+            padding: 4rem 2rem 2rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 3rem;
+        }
+
+        .footer-section h3 {
+            color: #fff;
+            margin-bottom: 1.5rem;
+            font-size: 1.2rem;
+        }
+
+        .footer-section ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 0.8rem;
+        }
+
+        .footer-section ul li a {
+            color: #9ca3af;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-section ul li a:hover {
+            color: #fff;
+        }
+
+        .footer-company-info {
+            margin-bottom: 2rem;
+        }
+
+        .footer-company-info h2 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .footer-company-info p {
+            color: #9ca3af;
+            margin-bottom: 0.5rem;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .social-links a {
+            background-color: #374151;
+            color: #fff;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.3s;
+        }
+
+        .social-links a:hover {
+            background-color: #4b5563;
+        }
+
+        .footer-bottom {
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid #374151;
+            text-align: center;
+            color: #9ca3af;
+            font-size: 0.9rem;
+        }
+
+        .footer-bottom a {
+            color: #fcd34d;
+            text-decoration: none;
+        }
+
+        .footer-bottom a:hover {
+            text-decoration: underline;
+        }
+
+        .back-to-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #fcd34d;
+            color: #000;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+
+        .back-to-top:hover {
+            background-color: #fbbf24;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">Portal System</div>
+        <div class="nav-links">
+            <span class="address">A108 Adam Street NY 535022, USA</span>
+            <a href="#home">Home</a>
+            <a href="#about">About</a>
+            <a href="#services">Services</a>
+            {% comment %} <a href="{% url 'register' %}" onclick="showModal('register-modal')">Register</a> {% endcomment %}
+            {% comment %} <a href="{% url 'userlogin' %}">Login</a> {% endcomment %}
+        </div>
+    </nav>
+
+    <section class="hero" id="home">
+        <h1>Welcome to Our Portal System</h1>
+        <p>A comprehensive solution for managing users, employees, and administrative tasks</p>
+        <div class="cta-buttons">
+            {% comment %} <a href="{% url 'register' %}" onclick="showModal('register-modal')" class="button primary-button">Register Now</a> {% endcomment %}
+            <a href="{% url 'user_login' %}" class="button secondary-button">Signin</a>
+        </div>
+    </section>
+
+    <section class="features" id="features">
+        <div class="feature-card">
+            <a href="{%url 'admin_login'%}"><h3>Admin</h3></a>
+            <p>Powerful administrative tools to manage the entire system</p>
+        </div>
+        <div class="feature-card">
+            <a href="{%url 'employee_login' %}"><h3>Employee</h3></a>
+            <p>Dedicated workspace for employee management and collaboration</p>
+        </div>
+    </section>
+
+    <section class="about-us" id="about">
+        <div class="about-us-text">
+            <h2>About Us</h2>
+            <p>'Portal System' is one of the leading innovative solutions providers in the industry. We have built our reputation on combining cutting-edge technology with exceptional user experience. We offer our clients a comprehensive suite of tools including user management, employee portals, and administrative systems. Our platform is updated daily with new features and is maintained by our talented team of developers. Our specialists work around the clock to ensure that your experience with our system is seamless and efficient!</p>
+        </div>
+        
+        <div class="category-cards">
+            <div class="category-card">
+                <img src="/static/images/Pic3.jpg" alt="User Management" class="category-image">
+                <div class="category-content">
+                    <h3>User Management</h3>
+                    <a href="#" class="shop-now">LEARN MORE →</a>
+                </div>
+            </div>
+            
+            <div class="category-card">
+                <img src="/static/images/Pic4.jpg" alt="Employee Portal" class="category-image">
+                <div class="category-content">
+                    <h3>Employee Portal</h3>
+                    <a href="#" class="shop-now">LEARN MORE →</a>
+                </div>
+            </div>
+            
+            <div class="category-card">
+                <img src="/static/images/Pic5.jpg" alt="Admin Tools" class="category-image">
+                <div class="category-content">
+                    <h3>Admin Tools</h3>
+                    <a href="#" class="shop-now">LEARN MORE →</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="services" id="services">
+        <div class="service-block">
+            <div class="service-content">
+                <h2>User Management System</h2>
+                <p>Our comprehensive user management system provides complete control over user access and permissions. With advanced authentication protocols and role-based access control, you can ensure that your organization's data remains secure while maintaining efficiency. Our system makes it easy to onboard new users, manage existing accounts, and monitor user activity across your entire platform.</p>
+                <p>Perfect for organizations looking to streamline their user administration and enhance security measures while providing a seamless experience for all users.</p>
+                <a href="#" class="service-cta">Learn More</a>
+            </div>
+            <div>
+                <img src="/static/images/Pic6.jpg" alt="User Management Interface" class="service-image">
+            </div>
+        </div>
+
+        <div class="service-block">
+            <div>
+                <img src="/static/images/Pic7.jpg" alt="Employee Dashboard" class="service-image">
+            </div>
+            <div class="service-content">
+                <h2>Employee Portal</h2>
+                <p>Transform your workplace with our intuitive employee portal solution. We've designed a powerful platform that centralizes all employee resources, communications, and tools in one accessible location. From document management to collaboration tools, everything your team needs is just a click away.</p>
+                <p>Empower your workforce with self-service capabilities and streamlined processes that enhance productivity and satisfaction.</p>
+                <a href="#" class="service-cta">Explore Features</a>
+            </div>
+        </div>
+
+        <div class="service-block">
+            <div class="service-content">
+                <h2>Administrative Tools</h2>
+                <p>Take control of your system with our robust administrative toolkit. Our comprehensive suite of administrative tools gives you complete oversight and management capabilities across your entire portal. From system configuration to detailed analytics and reporting, we provide everything you need to maintain and optimize your operations.</p>
+                <p>Built with flexibility and scalability in mind, our admin tools grow with your organization while maintaining ease of use.</p>
+                <a href="#" class="service-cta">View Details</a>
+            </div>
+            <div>
+                <img src="/static/images/Pic8.jpg" alt="Administrative Dashboard" class="service-image">
+            </div>
+        </div>
+    </section>
+
+    
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <div class="footer-company-info">
+                    <h2>Portal System</h2>
+                    <p>A108 Adam Street</p>
+                    <p>NY 535022, USA</p>
+                    <p>Phone: +1 5589 55488 55</p>
+                    <p>Email: info@example.com</p>
+                    <div class="social-links">
+                        <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-section">
+                <h3>Useful Links</h3>
+                <ul>
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#about">About us</a></li>
+                    <li><a href="#services">Services</a></li>
+                    <li><a href="#">Terms of service</a></li>
+                    <li><a href="#">Privacy policy</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h3>Our Services</h3>
+                <ul>
+                    <li><a href="#">User Management</a></li>
+                    <li><a href="#">Employee Portal</a></li>
+                    <li><a href="#">Administrative Tools</a></li>
+                    <li><a href="#">System Integration</a></li>
+                    <li><a href="#">Technical Support</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="#">Documentation</a></li>
+                    <li><a href="#">Resources</a></li>
+                    <li><a href="#">FAQ</a></li>
+                    <li><a href="#">Support</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </div>
+        </div>
+
+        {% comment %} <div class="footer-bottom">
+            <p>© Copyright <strong>Portal System</strong>. All Rights Reserved</p>
+            <p>Designed by <a href="#">BootstrapMade</a> | Distributed by <a href="#">ThemeWagon</a></p>
+        </div> {% endcomment %}
+    </footer>
+
+    <a href="#" class="back-to-top" aria-label="Back to top">↑</a>
+
+    <!-- Add Font Awesome for social icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+
+    <!-- Your existing modal and script sections remain the same -->
+    <script>
+        function showModal(modalId) {
+            document.getElementById(modalId).style.display = 'block';
+        }
+
+        function hideModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        window.onclick = function(event) {
+            if (event.target.className === 'modal') {
+                event.target.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>

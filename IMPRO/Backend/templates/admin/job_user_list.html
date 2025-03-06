@@ -1,0 +1,112 @@
+{% extends 'adminindex.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+  .resume-btn {
+    white-space: nowrap;
+  }
+</style>
+
+<div class="col-12 grid-margin stretch-card">
+  <div class="card">
+    <div class="card-body">
+      <h4 class="card-title">Manage Job Applications</h4>
+
+      <!-- Search Bar -->
+      <form method="GET" action="{% url 'job_user_list' %}">
+        <div class="input-group mb-3">
+          <input type="text" name="search" class="form-control" placeholder="Search by Name, Email, or Position..."
+                 value="{{ search_query }}" aria-label="Search Applications">
+          <div class="input-group-append">
+            <button class="btn btn-primary" type="submit">Search</button>
+          </div>
+        </div>
+      </form>
+
+      <div class="col-md-12">
+        <div class="card">
+          <div class="table-responsive pt-3">
+            <table class="table table-striped project-orders-table">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Phone</th>
+                  <th>Experience</th>
+                  <th>Education</th>
+                  <th>Position</th>
+                  <th>Resume</th>
+                  <th>Status</th>
+                  <th>Message</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for app in applications %}
+                  <tr>
+                    <td>{{ app.first_name }} {{ app.last_name }}</td>
+                    <td>{{ app.email }}</td>
+                    <td>{{ app.phone }}</td>
+                    <td>{{ app.experience }}</td>
+                    <td>{{ app.education }}</td>
+                    <td>{{ app.vacancy.title }}</td>
+                    <td>
+                      {% if app.resume %}
+                        <a href="{{ app.resume.url }}" target="_blank" class="btn btn-info btn-sm resume-btn">View Resume</a>
+                      {% else %}
+                        <span class="text-muted">No file uploaded</span>
+                      {% endif %}
+                    </td>
+                    <td>
+                      <form method="POST" action="{% url 'job_user_list' %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="application_id" value="{{ app.id }}">
+                        <select name="status" class="form-control">
+                          {% for status_choice, status_label in app.STATUS_CHOICES %}
+                            <option value="{{ status_choice }}" {% if app.status == status_choice %}selected{% endif %}>{{ status_label }}</option>
+                          {% endfor %}
+                        </select>
+                    </td>
+                    <td>
+                        <input type="text" name="message" class="form-control" placeholder="Enter message" value="{{ app.message }}">
+                    </td>
+                    <td>
+                        <button type="submit" class="btn btn-success btn-sm">Update</button>
+                      </form>
+                    </td>
+                  </tr>
+                {% empty %}
+                  <tr>
+                    <td colspan="10" class="text-center">No applications found.</td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+              
+            </table>
+
+            <!-- Pagination -->
+            <nav>
+              <ul class="pagination justify-content-center">
+                {% if applications.has_previous %}
+                  <li class="page-item"><a class="page-link" href="?page=1&search={{ search_query }}">First</a></li>
+                  <li class="page-item"><a class="page-link" href="?page={{ applications.previous_page_number }}&search={{ search_query }}">Previous</a></li>
+                {% endif %}
+
+                <li class="page-item active"><span class="page-link">Page {{ applications.number }} of {{ applications.paginator.num_pages }}</span></li>
+
+                {% if applications.has_next %}
+                  <li class="page-item"><a class="page-link" href="?page={{ applications.next_page_number }}&search={{ search_query }}">Next</a></li>
+                  <li class="page-item"><a class="page-link" href="?page={{ applications.paginator.num_pages }}&search={{ search_query }}">Last</a></li>
+                {% endif %}
+              </ul>
+            </nav>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
