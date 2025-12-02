@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 import os
 from pathlib import Path
+from django.core.management.utils import get_random_secret_key
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,10 +21,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-b#(&^5tea12$v7-%1!fyuje&el^2iyn2o%cp3h^%*whm8-&4+!'
+# SECRET_KEY = 'django-insecure-b#(&^5tea12$v7-%1!fyuje&el^2iyn2o%cp3h^%*whm8-&4+!'
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-b#(&^5tea12$v7-%1!fyuje&el^2iyn2o%cp3h^%*whm8-&4+!')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DJANGO_DEBUG', 'False') == 'True'
 
 ALLOWED_HOSTS = [
     'impro-j58z.onrender.com',  # your Render app URL
@@ -128,7 +130,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = 'static/'
-STATIC_ROOT = 'static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 LOGIN_REDIRECT_URL = '/applied-jobs/' 
 
