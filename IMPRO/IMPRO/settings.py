@@ -22,7 +22,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 # SECRET_KEY = 'django-insecure-b#(&^5tea12$v7-%1!fyuje&el^2iyn2o%cp3h^%*whm8-&4+!'
-SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-b#(&^5tea12$v7-%1!fyuje&el^2iyn2o%cp3h^%*whm8-&4+!')
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'fallback-secret-key')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DJANGO_DEBUG', 'False') == 'True'
@@ -32,7 +32,7 @@ ALLOWED_HOSTS = [
     'localhost',                # optional for local dev
     '127.0.0.1',                # optional for local dev
 ]
-
+# ALLOWED_HOSTS = os.environ.get('DJANGO_ALLOWED_HOSTS', 'impro-j58z.onrender.com').split(',')
 
 
 # Application definition
