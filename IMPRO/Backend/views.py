@@ -91,7 +91,7 @@ class AddDepartmentView(CreateView):
 
 class DepartmentListView(ListView):
     model = Department
-    template_name = 'admin/Add and Manage Department.html'
+    template_name = 'admin/Add and manage Department.html'
     context_object_name = 'dep'
 
 class DepartmentUpdateView(SuccessMessageMixin, UpdateView):

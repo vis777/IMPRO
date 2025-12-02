@@ -58,7 +58,7 @@ class EmployeeLoginView(View):
             request.session["employee_id"] = employee.id
             request.session["employee_name"] = employee.name
 
-            messages.success(request, "Login successful.")
+            # messages.success(request, "Login successful.")
             return redirect("employeepage")  # Redirect to employee dashboard
 
         else:
@@ -67,7 +67,7 @@ class EmployeeLoginView(View):
 
 class EmployeeLogoutView(View):
     def get(self, request):
-        messages.success(request, "Logout successful")
+        # messages.success(request, "Logout successful")
         return redirect('index')
 
 class UserLoginView(View):
